@@ -6,7 +6,8 @@
     "prestart": "node utils/create-database.js",
     "start": "nodemon -r dotenv/config index.js",
     "test": "mocha tests/**/*.js --exit --recursive --timeout 60000 --file ./tests/test-setup.js",
-    "posttest": "node utils/drop-database.js",
+    "pretest": "node utils/create-database.js test",
+    "posttest": "node utils/drop-database.js"
   },
   "repository": {
     "type": "git",
