@@ -1,7 +1,8 @@
-.package.json
 .package-lock.json
 .prettierrc.json
 .eslintrc.js
+.env
+.env.test
 
 # Logs
 logs
