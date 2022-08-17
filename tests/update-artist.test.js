@@ -41,9 +41,10 @@ describe('update artist', () => {
 
         expect(res.status).to.equal(200);
 
-        const [
-          [newArtistRecord],
-        ] = await db.query('SELECT * FROM Artist WHERE id = ?', [artist.id]);
+        const [[newArtistRecord]] = await db.query(
+          'SELECT * FROM Artist WHERE id = ?',
+          [artist.id]
+        );
 
         expect(newArtistRecord.name).to.equal('new name');
       });
