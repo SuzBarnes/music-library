@@ -78,7 +78,7 @@ exports.delete = async (req, res) => {
   const [deletedArtistRecord] = await db.query('DELETE FROM Artist WHERE id = ?', [ 
     artistId
   ]);
-  console.log(deletedArtistRecord);
+  // console.log(deletedArtistRecord);
 
   if(!artist){
     res.status(404).json({error: 'Artist record could not be found to delete.'});
@@ -88,3 +88,35 @@ exports.delete = async (req, res) => {
   db.end();
 };
 
+
+exports.readAlbum = async (req, res) => {
+  const db = await getDb();
+  try{
+    const [albums] = await db.query('SELECT * FROM Album');
+    console.log(albums)
+    res.sendStatus(200).json(albums);
+  } catch (err) {
+    res.sendStatus(500).json(err);
+  }
+  db.end();
+};
+
+
+exports.createAlbum = async (req, res) => {
+  const db = await getDb();
+  const {name, year} = req.body;
+  const {artistId} = req.params;
+
+  try { 
+      await db.query('INSERT INTO Album (name, year, artistId) VALUES (?, ?, ?)', [
+          name,
+          year,
+          artistId
+      ]);
+      res.sendStatus(201);
+  } catch (err){
+      res.sendStatus(500).json(err)
+  }
+ 
+  db.end();
+};

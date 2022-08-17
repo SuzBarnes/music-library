@@ -12,7 +12,7 @@ describe('create album', () => {
             'Rock'
             ]);
            const artist = await db.query('SELECT * FROM Artist');
-           console.log(artist[0]);}
+           }
            catch(err){console.log(err)}
     })
     
