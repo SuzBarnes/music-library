@@ -137,3 +137,24 @@ exports.createAlbum = async (req, res) => {
 
   db.end();
 };
+
+exports.updateAlbum = async (req, res) => {
+  const db = await getDb();
+  const { albumId } = req.params;
+  console.log(albumId);
+
+  try {
+    const [{ affectedRows }] = await db.query(
+      'UPDATE Album SET ? WHERE id = ?',
+      [req.body, albumId]
+    );
+    if (!affectedRows) {
+      res.status(404).send({ error: 'Album not found' });
+    } else {
+      res.status(201).send({ message: 'Your album has been updated!' });
+    }
+  } catch (err) {
+    // console.log(err);
+    res.sendStatus(500).json(err);
+  }
+};

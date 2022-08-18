@@ -7,10 +7,14 @@ describe('update album', () => {
   let db;
   let createdArtistsIds;
   let createdAlbumsIds;
+  let createdAlbums;
+  let createdArtists;
+  let artists;
+  let albums;
 
   beforeEach(async () => {
     db = await getDb();
-    const createdArtists = await Promise.all([
+    createdArtists = await Promise.all([
       db.query('INSERT INTO Artist (name, genre) VALUES (?, ?)', [
         'Jack Johnson',
         'Rock',
@@ -29,7 +33,7 @@ describe('update album', () => {
     createdArtistsIds = createdArtists.map((artist) => {
       return artist[0].insertId;
     });
-    const createdAlbums = await Promise.all([
+    createdAlbums = await Promise.all([
       db.query('INSERT INTO Album (name, year, artistId) VALUES (?, ?, ?)', [
         'In Between Dreams',
         2005,
@@ -54,36 +58,51 @@ describe('update album', () => {
     // console.log(createdAlbums);
   });
   afterEach(async () => {
-    await db.query('DELETE FROM Album');
+    // await db.query('DELETE FROM Album');
     await db.end();
   });
 
   describe('/artist/:artistId/album/:albumId', () => {
     describe('PATCH', () => {
-      it('updates a single album name with the correct id', async () => {
+      it('updates a single album with the correct id', async () => {
+        const artist = artists[0];
+        const album = albums[0];
         const res = await request(app)
           .patch(`/artist/${createdArtistsIds[0]}/album/${createdAlbumsIds[0]}`)
           .send({ name: 'new name', year: 2000 });
 
-        console.log('============>');
-        console.log(createdAlbumsIds[0]);
-        console.log(createdArtistsIds[0]);
-        expect(res.status).to.equal(200);
+        // console.log('============>');
+        // console.log('Artist ID', artist.id);
+        // console.log('Artist', artist)
+        // console.log(album.name);
+        // console.log(album.year)
+        // console.log(createdArtistsIds[0])
+        // console.log(album.artistId)
+        // console.log(album.id)
+        // console.log(createdAlbumsIds[0])
+        // console.log("created Albums", createdAlbums)
+
+        // console.log('/artist/10002957/album/1192', res)
+
+        expect(res.status).to.equal(201);
 
         const [[newAlbumRecord]] = await db.query(
           'SELECT * FROM Album WHERE id = ?',
           [createdAlbumsIds[0]]
         );
+        console.log('============>');
+        console.log('newAlbumRecord', newAlbumRecord);
+        console.log(album.name);
         expect(newAlbumRecord.name).to.equal('new name');
       });
 
       it('returns a 404 if the album is not in the database', async () => {
         const res = await request(app)
-        .patch('/artist/999999/album/999999')
-        .send({name: 'new name'});
+          .patch('/artist/999999/album/999999')
+          .send({ name: 'new name' });
 
         expect(res.status).to.equal(404);
-      })
+      });
     });
   });
 });
