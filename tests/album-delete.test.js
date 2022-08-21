@@ -9,7 +9,6 @@ describe('delete album', () => {
   let createdAlbumsIds;
   let createdAlbums;
   let createdArtists;
-  let albums;
 
   beforeEach(async () => {
     db = await getDb();
@@ -48,7 +47,7 @@ describe('delete album', () => {
         createdArtistsIds[2],
       ]),
     ]);
-    [albums] = await db.query('SELECT * FROM Album');
+    
     createdAlbumsIds = createdAlbums.map((album) => {
       return album[0].insertId;
     });
