@@ -166,15 +166,14 @@ exports.deleteAlbum = async (req, res) => {
     albumId,
   ]);
 
-  await db.query('DELETE FROM Album WHERE id = ?',[
-    albumId,
-  ]);
+  await db.query('DELETE FROM Album WHERE id = ?', [albumId]);
 
-
-  if (!album)
-  {res.status(404).json({error: 'Album is not in the database'});
+  if (!album) {
+    res.status(404).json({ error: 'Album is not in the database' });
   } else {
-    res.status(200).json({message: `Album with the id = ${albumId} has successfully been deleted`});
-}
-db.end();
+    res.status(200).json({
+      message: `Album with the id = ${albumId} has successfully been deleted`,
+    });
+  }
+  db.end();
 };
