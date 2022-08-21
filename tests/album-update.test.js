@@ -9,7 +9,7 @@ describe('update album', () => {
   let createdAlbumsIds;
   let createdAlbums;
   let createdArtists;
-  let artists;
+
   let albums;
 
   beforeEach(async () => {
@@ -29,7 +29,7 @@ describe('update album', () => {
       ]),
     ]);
 
-    [artists] = await db.query('SELECT * FROM Artist');
+   
     createdArtistsIds = createdArtists.map((artist) => {
       return artist[0].insertId;
     });
@@ -65,7 +65,7 @@ describe('update album', () => {
   describe('/artist/:artistId/album/:albumId', () => {
     describe('PATCH', () => {
       it('updates a single album with the correct id', async () => {
-        const artist = artists[0];
+      
         const album = albums[0];
         const res = await request(app)
           .patch(`/artist/${createdArtistsIds[0]}/album/${createdAlbumsIds[0]}`)
